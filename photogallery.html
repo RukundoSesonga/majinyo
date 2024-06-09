@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Card</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #1c1c1c;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .card {
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    height: auto;
+    position: relative;
+    transition: transform 0.2s;
+    cursor: grab; /* Indicate that the card is draggable */
+  }
+  .card:active {
+    cursor: grabbing; /* Indicate that the card is being dragged */
+  }
+  .card-header, .card-footer {
+    margin-bottom: 20px;
+  }
+  .card-header #text {
+    background-color: #c50000;
+    padding: 60px;
+    border-radius: 5px;
+  }
+  .Gallery-1, .Gallery-3 {
+    display: flex;
+    justify-content: space-around;
+  }
+  .Gallery-1 img, .Gallery-3 img {
+    width: 60px;
+    height: 150px;
+    border-radius: 5px;
+    margin-right: 5px;
+  }
+  .Gallery-3 img {
+    width: 40px;
+    height: 150px;
+  }
+</style>
+</head>
+<body>
+<div class="card resizable" id="card">
+  <div class="card-header">
+    <div id="intro">intro</div>
+    <div id="text">The designs represent bot desktop and mobile view<br><br>To view Interactions:<br>Run the designs in prototype mode.</div>
+  </div>
+  <div class="card-body">Gallery-1
+    <div class="Gallery-1">
+        <img src="image1.jpeg" alt="FENNEC FOX">
+        <img src="image2.jpeg" alt="HUMPBACK WHALE">
+        <img src="image3.jpeg" alt="COMMON BROWN BABOON">
+        <img src="image4.jpeg" alt="SPOTTED DEER">
+    </div>
+  </div>
+  <div class="card-footer">Gallery 03
+    <div class="Gallery-3">
+        <img src="image1.jpeg" alt="FENNEC FOX">
+        <img src="image2.jpeg" alt="HUMPBACK WHALE">
+        <img src="image3.jpeg" alt="COMMON BROWN BABOON">
+        <img src="image4.jpeg" alt="SPOTTED DEER">
+    </div>
+  </div>
+</div>
+
+<script>
+  const card = document.getElementById('card');
+  let isDragging = false;
+  let prevX, prevY;
+
+  // Dragging functionality
+  card.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    prevX = e.clientX;
+    prevY = e.clientY;
+    card.style.position = 'absolute';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      const deltaX = e.clientX - prevX;
+      const deltaY = e.clientY - prevY;
+      const rect = card.getBoundingClientRect();
+      card.style.left = rect.left + deltaX + 'px';
+      card.style.top = rect.top + deltaY + 'px';
+      prevX = e.clientX;
+      prevY = e.clientY;
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  // Resizing functionality
+  card.addEventListener('wheel', (e) => {
+    if (e.deltaY > 0) {
+      card.style.width = card.offsetWidth * 0.9 + 'px';
+      card.style.height = card.offsetHeight * 0.9 + 'px';
+    } else {
+      card.style.width = card.offsetWidth * 1.1 + 'px';
+      card.style.height = card.offsetHeight * 1.1 + 'px';
+    }
+  });
+
+  // Zoom in/out functionality
+  let zoomLevel = 1;
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '+' || e.key === '-') {
+      if (e.key === '+') {
+        zoomLevel += 0.1;
+      } else if (e.key === '-') {
+        zoomLevel -= 0.1;
+      }
+      card.style.transform = `scale(${zoomLevel})`;
+    }
+  });
+</script>
+</body>
+</html>
